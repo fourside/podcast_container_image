@@ -1,13 +1,33 @@
 on:
   push:
-    tags:
-      - v*
+    branches:
+      - main
 
 jobs:
   push-image:
     runs-on: ubuntu-18.04
     timeout-minutes: 300
+    permissions:
+      id-token: write
+      contents: read
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-region: "ap-northeast-1"
+          role-to-assume: "arn:aws:iam::540093229923:role/ecr_pushed_from_github_action"
+
+      - uses: aws-actions/amazon-ecr-login@v2
+        id: login-ecr
+
+      - name: Build and push
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY: "podcast"
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build . --tag ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ env.IMAGE_TAG }}
+          docker push ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ env.IMAGE_TAG }}
