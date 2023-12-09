@@ -1,17 +1,17 @@
-import { authorize } from "./auth-client.ts";
+import { authorize } from "../auth-client.ts";
+import { getDateIfMidnightThenSubtracted } from "../date.ts";
+import { Env } from "../env.ts";
+import { getLogger, setupLog } from "../logger.ts";
+import { getOutputFilename } from "../output-filename.ts";
+import { sendMessageToSlack } from "../slack-client.ts";
+import { getPlaylistXml } from "../xml-client.ts";
+import { getPlaylistUriFromXml } from "../xml-parser.ts";
 import { parseArgs } from "./cli.ts";
-import { getDateIfMidnightThenSubtracted } from "./date.ts";
-import { Env } from "./env.ts";
-import { getLogger, setupLog } from "./logger.ts";
-import { getOutputFilename } from "./output-filename.ts";
-import { record } from "./recorder.ts";
-import { sendMessageToSlack } from "./slack-client.ts";
-import { getPlaylistXml } from "./xml-client.ts";
-import { getPlaylistUriFromXml } from "./xml-parser.ts";
+import { record } from "./record.ts";
 
 export async function main(args: string[]) {
   setupLog(Env.isProduction ? "INFO" : "DEBUG");
-  const logger = getLogger("batch");
+  const logger = getLogger("realtime");
 
   const result = parseArgs(args);
   if (result.exit) {
@@ -20,7 +20,7 @@ export async function main(args: string[]) {
   logger.info(`record start. ${args}`);
   const { station, duration, title, artist } = result;
   try {
-    await batch({ station, duration, title, artist });
+    await realtime({ station, duration, title, artist });
     logger.info("record end.");
   } catch (error) {
     logger.error("record failed.", error);
@@ -40,7 +40,7 @@ type RecordValue = {
   artist: string;
 };
 
-async function batch(recordValue: RecordValue): Promise<void> {
+async function realtime(recordValue: RecordValue): Promise<void> {
   const authToken = await authorize();
   const xml = await getPlaylistXml(recordValue.station);
   const playListUrl = getPlaylistUriFromXml(xml);

@@ -1,7 +1,7 @@
 import { parseArgs as parse } from "std/cli";
 
-import { getLogger } from "./logger.ts";
-import { version } from "./version.ts";
+import { getLogger } from "../logger.ts";
+import { version } from "../version.ts";
 
 type ReturnValue = {
   exit: true;
@@ -17,7 +17,7 @@ type ReturnValue = {
 const commandName = "rec_radiko";
 
 export function parseArgs(args: string[]): ReturnValue {
-  const logger = getLogger("batch");
+  const logger = getLogger("realtime");
   const parsed = parse(args);
   if (parsed.version || parsed.v) {
     logger.info(`${commandName} version: ${version.version}`);
@@ -61,7 +61,7 @@ export function parseArgs(args: string[]): ReturnValue {
 }
 
 function showUsage() {
-  const logger = getLogger("batch");
+  const logger = getLogger("realtime");
   logger.info(
     `usage: ${commandName} --station <station> --duration <duration> --title <title> --artist <artist>`,
   );

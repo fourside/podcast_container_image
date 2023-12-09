@@ -36,5 +36,5 @@ export function setupLog(logLevel: log.LevelName): void {
   });
 }
 
-export const getLogger = (app: "batch" | "sqs" | "common") =>
+export const getLogger = (app: "realtime" | "queue" | "common") =>
   log.getLogger(app);

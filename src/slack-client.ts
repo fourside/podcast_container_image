@@ -21,7 +21,7 @@ export async function sendMessageToSlack(
     },
     body: JSON.stringify(blocks),
   });
-  const logger = getLogger("batch");
+  const logger = getLogger("realtime");
   logger.info("Send Slack response.", response);
 }
 
@@ -76,7 +76,7 @@ export async function sendTimefreeErrorMessageToSlack(
     },
     body: JSON.stringify(blocks),
   });
-  const logger = getLogger("sqs");
+  const logger = getLogger("queue");
   logger.info("Send Slack response.", response);
 }
 

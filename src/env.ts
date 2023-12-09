@@ -12,6 +12,15 @@ export const Env = Object.freeze({
     secretAccessKey: Deno.env.get("CLOUDFLARE_SECRET_ACCESS_KEY") ||
       unreachable("CLOUDFLARE_SECRET_ACCESS_KEY"),
   },
+  aws: {
+    accessKeyId: Deno.env.get("AWS_ACCESS_KEY_ID") ||
+      unreachable("AWS_ACCESS_KEY_ID"),
+    secretAccessKey: Deno.env.get("AWS_SECRET_ACCESS_KEY") ||
+      unreachable("AWS_SECRET_ACCESS_KEY"),
+    sqsUrl: Deno.env.get("SQS_URL") || unreachable("SQS_URL"),
+    deadLetterSqsUrl: Deno.env.get("DEAD_LETTER_SQS_URL") ||
+      unreachable("DEAD_LETTER_SQS_URL"),
+  },
 });
 
 function unreachable(name: string): never {

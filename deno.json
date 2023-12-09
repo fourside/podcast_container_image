@@ -1,7 +1,8 @@
 {
   "tasks": {
     "dev": "deno run --watch src/main.ts",
-    "run": "deno run --allow-run --allow-net --allow-env --allow-read --allow-write --allow-sys src/mod.ts",
+    "run": "deno run --allow-run --allow-net --allow-env --allow-read --allow-write --allow-sys src/realtime/mod.ts",
+    "queue": "deno run --allow-run --allow-net --allow-env --allow-read --allow-write src/queue/mod.ts",
     "reload-cache": "deno cache --reload src/mod.ts",
     "run:sample": "deno task run -s TBS -d 1 -t テスト -a パーソナリティ"
   },
