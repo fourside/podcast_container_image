@@ -7,6 +7,6 @@ COPY . .
 RUN apk add --no-cache \
         tzdata ffmpeg bash \
     && cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime \
-    && deno cache src/mod.ts
+    && deno task cache
 
 CMD ["deno", "task", "run"]
