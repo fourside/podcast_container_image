@@ -18,7 +18,7 @@ jobs:
       - uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-region: ap-northeast-1
-          role-to-assume: arn:aws:iam::540093229923:role/ecr_pushed_from_github_action
+          role-to-assume: arn:aws:iam::540093229923:role/podcast-repository-role
 
       - uses: aws-actions/amazon-ecr-login@v2
         id: login-ecr
@@ -26,7 +26,7 @@ jobs:
       - name: Build and push
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          REPOSITORY: podcast
+          REPOSITORY: podcast-repository
           IMAGE_TAG: ${{ github.sha }}
         run: |
           docker build . --tag ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ env.IMAGE_TAG }} --tag latest
